@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alarm Clock</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="clock">
+    <img src="https://static.vecteezy.com/system/resources/previews/015/693/596/original/alarm-clock-logo-icon-vector.jpg" />
+    <div id="time"></div>
+    <div class="setAlarm">
+      <input type="time" id="alarmTime">
+      <button onclick="setAlarm()">Set Alarm</button>
+    </div>
+    <div id="alarmMessage"></div>
+  </div>
+
+  <script>
+    function updateTime() {
+  const now = new Date();
+  const hours = now.getHours().toString().padStart(2, '0');
+  const minutes = now.getMinutes().toString().padStart(2, '0');
+  const seconds = now.getSeconds().toString().padStart(2, '0');
+  document.getElementById('time').innerText = `${hours}:${minutes}:${seconds}`;
+}
+
+function setAlarm() {
+  const alarmTimeInput = document.getElementById('alarmTime').value;
+  const [alarmHour, alarmMinute] = alarmTimeInput.split(':');
+  const now = new Date();
+  const alarm = new Date();
+  alarm.setHours(alarmHour);
+  alarm.setMinutes(alarmMinute);
+  alarm.setSeconds(0);
+
+  if (alarm < now) {
+    alarm.setDate(alarm.getDate() + 1); // If alarm time is in the past, set it for tomorrow
+  }
+
+  const timeDiff = alarm - now;
+  setTimeout(() => {
+    document.getElementById('alarmMessage').innerText = "Wake up!";
+  }, timeDiff);
+
+  document.getElementById('alarmMessage').innerText = "Alarm set for " + alarmTimeInput;
+}
+
+// Update time every second
+setInterval(updateTime, 1000);
+
+// Initial call to display time
+updateTime();
+
+  </script>
+</body>
+</html>
